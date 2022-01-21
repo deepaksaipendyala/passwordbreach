@@ -1,7 +1,10 @@
 import requests
 import hashlib
-import sys
+import passwordgenerate as pg
 
+def newpass():
+  return pg.gen()
+  
 def request_api_data(qchar):
   url = 'https://api.pwnedpasswords.com/range/' + qchar
   res = requests.get(url)
@@ -22,16 +25,16 @@ def hashing(password):
   response= request_api_data(f5char)
   return get_password_leaks_count(response,l5char)
 
-def main(args):
-  for password in args:
-    count=hashing(password)
-    if count:
-      print(f'{password} was found {count} times... its high on time to change the password {password} to better secured !')
-    else:
-       print(f'{password} was NOT found. It seems Good to Go!')
+def check(password):
+  count=hashing(password)
+  if count:
+      print(f'The password "{password}" was found {count} times... its high time to change your password  to for a better security !')
+      print(f"New password:{newpass()}\nYou can use the generated password for better security")
+  else:
+       print(f'The password "{password}" was NOT found. It seems Good to Go!')
   return 'done!'
 
+
 if __name__=='__main__':
-    sys.exit(main(sys.argv[1:]))
-
-
+    p=input("Enter your password:")
+    check(p)
